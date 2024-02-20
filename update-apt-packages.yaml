@@ -1,10 +1,11 @@
 ---
 - hosts: all
-  become: true
-  become_user: root
- 
   tasks:
-    - name: update apt packages
+    - name: Limpar bloqueios apt
+      shell: rm -f /var/lib/apt/lists/lock
+      ignore_errors: true
+
+    - name: Atualizar pacotes apt
       apt:
         upgrade: yes
         update_cache: yes
