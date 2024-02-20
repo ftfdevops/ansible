@@ -1,18 +1,9 @@
 ---
 -host: all
 
-<<<<<<< HEAD
 become: true
 tasks:
   - name: update apt packages
     apt:
       upgrade: yes
       update_cache: yes
-=======
-  become: true
-  tasks:
-    -name: update apt packages files
-     apt:
-       uprade: yes
-       update_cache: yes
->>>>>>> fb4bc92 (message)
