@@ -4,25 +4,7 @@
   become_user: root
 
   tasks:
-    - name: Remover arquivo de bloqueio do apt
-      become: yes
-      shell: rm -f /var/lib/apt/lists/lock
-      ignore_errors: yes
-
-    - name: Reiniciar o serviço apt-daily
-      become: yes
-      service:
-        name: apt-daily
-        state: restarted
-
-    - name: Reiniciar o serviço apt-daily-upgrade
-      become: yes
-      service:
-        name: apt-daily-upgrade
-        state: restarted
-
     - name: Atualizar pacotes apt
-      become: yes
       apt:
         update_cache: yes
         upgrade: yes
