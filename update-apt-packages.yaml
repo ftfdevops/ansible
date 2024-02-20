@@ -6,8 +6,10 @@
   tasks:
     - name: Remover arquivo de bloqueio do apt
       become: yes
-      shell: rm -f /var/lib/apt/lists/lock
-      ignore_errors: yes
+      file:
+        path: /var/lib/apt/list/lock
+        state: absent
+        ignore_errors: yes
 
     - name: Atualizar pacotes apt
       become: yes
