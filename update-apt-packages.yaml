@@ -9,7 +9,7 @@
       file:
         path: /var/lib/apt/list/lock
         state: absent
-        ignore_errors: yes
+#        ignore_errors: yes
 
     - name: Atualizar pacotes apt
       become: yes
