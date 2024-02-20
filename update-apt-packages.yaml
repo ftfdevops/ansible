@@ -6,4 +6,4 @@
     -name: update apt packages
      apt:
        uprade: yes
-       update_cahe: yes
+       update_cache: yes
