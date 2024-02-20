@@ -9,10 +9,16 @@
       shell: rm -f /var/lib/apt/lists/lock
       ignore_errors: yes
 
-    - name: Reiniciar o serviço apt
+    - name: Reiniciar o serviço apt-daily
       become: yes
       service:
-        name: apt
+        name: apt-daily
+        state: restarted
+
+    - name: Reiniciar o serviço apt-daily-upgrade
+      become: yes
+      service:
+        name: apt-daily-upgrade
         state: restarted
 
     - name: Atualizar pacotes apt
