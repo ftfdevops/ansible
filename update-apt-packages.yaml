@@ -3,6 +3,6 @@
   environment:
     GIT_TERMINAL_PROMPT: "1"
   git:
-    repo: https://github.com/ftfdevops/ansible
+    repo: git@github.com:ftfdevops/ansible.git
     dest: /path/to/clone/repository
 
