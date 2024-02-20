@@ -4,13 +4,20 @@
   become_user: root
 
   tasks:
-    - name: Limpar bloqueios
+    - name: Remover arquivo de bloqueio do apt
+      become: yes
       shell: rm -f /var/lib/apt/lists/lock
-      ignore_errors: true
+      ignore_errors: yes
+
+    - name: Reiniciar o serviço apt
+      become: yes
+      service:
+        name: apt
+        state: restarted
 
     - name: Atualizar pacotes apt
+      become: yes
       apt:
-        upgrade: yes
         update_cache: yes
-        force_apt_get: yes
+        upgrade: yes
 
