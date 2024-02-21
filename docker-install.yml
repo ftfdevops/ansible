@@ -10,9 +10,18 @@
       debug:
         var: docker_version_output.stdout
 
+    - name: Obter a versão mais recente do Docker
+      shell: apt-cache madison docker-ce | awk 'NR==1{print $3}'
+      register: docker_latest_version_output
+
+    - name: Mostrar a versão mais recente do Docker
+      debug:
+        var: docker_latest_version_output.stdout
+
     - name: Atualizar o Docker se necessário
       apt:
         name: docker-ce
         state: latest
-      when: "docker_version_output.stdout | version_compare('20.10', '>=')"
+      when: docker_latest_version_output.stdout != docker_version_output.stdout
+
 
