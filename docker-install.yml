@@ -23,5 +23,15 @@
         name: docker-ce
         state: latest
       when: docker_latest_version_output.stdout != docker_version_output.stdout
-
+    
+    - name: Enviar e-mail se o Docker estiver atualizado
+      mail:
+        host: smtp.gmail.com
+        port: 465
+        username: 30demaio@gmail.com
+        password: Dianajorginho123#
+        to: dreamboxiphone@gmail.com
+        subject: "Versão do Docker está atualizada"
+        body: "A versão do Docker está atualizada: {{ docker_version_output.stdout }}"
+      when: docker_latest_version_output.stdout == docker_version_output.stdout
 
