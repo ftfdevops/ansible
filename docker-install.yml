@@ -1,6 +1,6 @@
 ---
 - name: install docker
-  hosts: "{{ all }}"
+  hosts: all
   become: yes
   tasks:
     - name: install docker dependencies
