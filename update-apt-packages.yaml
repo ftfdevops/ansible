@@ -1,17 +1,20 @@
+---
 - hosts: all
   become: true
   tasks:
     - name: Verificar se os pacotes apt precisam ser atualizados
       become: yes
-      shell: apt-get -s upgrade | grep -q 'Pacotes a serem atualizados:'
-      register: apt_update_needed
+      command: apt-get -s upgrade
+      register: apt_upgrade_check
       changed_when: false
+      ignore_errors: true
 
     - name: Atualizar pacotes apt
       become: yes
       apt:
         update_cache: yes
         upgrade: yes
-      when: apt_update_needed.stdout == "true"
+      when: apt_upgrade_check.rc == 0 and "Pacotes a serem atualizados:" in apt_upgrade_check.stdout
+
 
 
