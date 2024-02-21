@@ -2,36 +2,21 @@
 - hosts: all
   become: yes
   tasks:
-    - name: Verificar se o Docker está atualizado
-      shell: docker --version | awk '{print $3}'
-      register: docker_version_output
+    - name: Verificar se o Docker está instalado
+      command: docker --version
+      register: docker_installed
+      ignore_errors: true
 
-    - name: Mostrar a versão atual do Docker
-      debug:
-        var: docker_version_output.stdout
+    - name: Instalar o Docker se não estiver instalado
+      shell: curl -fsSL https://get.docker.com | sh
+      args:
+        creates: /usr/bin/docker
+      when: docker_installed.rc != 0
 
-    - name: Obter a versão mais recente do Docker
-      shell: apt-cache madison docker-ce | awk 'NR==1{print $3}'
-      register: docker_latest_version_output
+    - name: Reiniciar o serviço Docker
+      service:
+        name: docker
+        state: restarted
+      when: docker_installed.rc != 0
 
-    - name: Mostrar a versão mais recente do Docker
-      debug:
-        var: docker_latest_version_output.stdout
-
-    - name: Atualizar o Docker se necessário
-      apt:
-        name: docker-ce
-        state: latest
-      when: docker_latest_version_output.stdout != docker_version_output.stdout
-    
-    - name: Enviar e-mail se o Docker estiver atualizado
-      mail:
-        host: smtp.gmail.com
-        port: 465
-        username: 30demaio@gmail.com
-        password: Dianajorginho123#
-        to: dreamboxiphone@gmail.com
-        subject: "Versão do Docker está atualizada"
-        body: "A versão do Docker está atualizada: {{ docker_version_output.stdout }}"
-      when: docker_latest_version_output.stdout == docker_version_output.stdout
 
