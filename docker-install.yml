@@ -13,10 +13,24 @@
         creates: /usr/bin/docker
       when: docker_installed.rc != 0
 
+    - name: Instalar o Docker Compose
+      command: >
+        curl -L "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
+      when: docker_installed.rc == 0
+
+    - name: Dar permissão de execução ao Docker Compose
+      file:
+        path: /usr/local/bin/docker-compose
+        mode: 'a+x'
+      when: docker_installed.rc == 0
+
     - name: Reiniciar o serviço Docker
       service:
         name: docker
         state: restarted
       when: docker_installed.rc != 0
+
 
 
