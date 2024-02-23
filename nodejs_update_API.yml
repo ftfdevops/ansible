@@ -4,25 +4,26 @@
   tasks:
     - name: Cria a rede externa se ainda não existir
       shell: docker network ls | grep -q 'node_js_default' || docker network create --driver=overlay node_js_default
-      
+
     - name: Para a stack
       shell: docker stack down node_js
-      
+
     - name: Remove a imagem antiga do cache do Swarm
       shell: docker image rm -f dockerimages.ddns.net/fjapi/nodex64:latest
-      
+
     - name: Baixa a nova imagem
       shell: docker pull dockerimages.ddns.net/fjapi/nodex64:latest
-      
+
     - name: Redeploy da stack com a nova imagem
       shell: docker stack deploy -c docker-compose.yml node_js
-      
+
     - name: Envia mensagem para o Telegram
       telegram:
         api_method: sendMessage
         api_args:
-          text: Imagem submetida com sucesso
+          text: "Imagem submetida com sucesso"
           chat_id: 6632854362
-          token: 7162252872AAFfQ2zyjHBf7a3j9BmyFgPltGYVDO5i6c
+        token: "7162252872:AAFfQ2zyjHBf7a3j9Bmy-FgPltGYVDO5i6c"
+
 
 
