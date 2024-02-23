@@ -18,10 +18,11 @@
       shell: docker stack deploy -c docker-compose.yml node_js
 
     - name: Envia mensagem para o Telegram
-      telegram:
-        api_method: sendMessage
-        api_args:
-          text: "Imagem submetida com sucesso"
-          chat_id: 6632854362
+     telegram:
+      api_method: sendMessage
+      api_args:
+        text: "Imagem submetida com sucesso"
+        chat_id: 6632854362
         token: 7162252872:AAFfQ2zyjHBf7a3j9Bmy-FgPltGYVDO5i6c
+
 
