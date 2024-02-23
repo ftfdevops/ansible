@@ -26,7 +26,7 @@
         body_format: json
         body:
           chat_id: 6632854362
-          text: "Imagem submetida com sucesso"
+          text: "Imagem da API Node.js submetida com sucesso"
         status_code: 200
       register: telegram_response
       ignore_errors: true
