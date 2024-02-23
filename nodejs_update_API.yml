@@ -1,37 +1,27 @@
 ---
-- hosts: all
+- hosts: seu_host
   become: yes
   tasks:
-    - name: Create the external network if not exists
-      command: docker network ls | grep -q 'node_js_default' || docker network create --driver=overlay node_js_default
-      changed_when: false  # Indicates that the task does not change anything if the network already exists
+    - name: Cria a rede externa se ainda não existir
+      shell: docker network ls | grep -q 'node_js_default' || docker network create --driver=overlay node_js_default
 
-    - name: Stop the stack
-      command: docker stack down node_js
+    - name: Para a stack
+      shell: docker stack down node_js
 
-    - name: Remove the old image
-      command: docker image rm -f dockerimages.ddns.net/fjapi/nodex64:latest
-      ignore_errors: yes  # Ignores errors if the image does not exist
+    - name: Remove a imagem antiga do cache do Swarm
+      shell: docker image rm -f dockerimages.ddns.net/fjapi/nodex64:latest
 
-    - name: Pull the new image
-      command: docker pull dockerimages.ddns.net/fjapi/nodex64:latest
+    - name: Baixa a nova imagem
+      shell: docker pull dockerimages.ddns.net/fjapi/nodex64:latest
 
-    - name: Redeploy the stack
-      command: docker stack deploy -c docker-compose.yml node_js
+    - name: Redeploy da stack com a nova imagem
+      shell: docker stack deploy -c docker-compose.yml node_js
 
-    - name: Decrypt the Telegram token
-      command: ansible-vault decrypt secret.yaml
-      register: decrypted_secret
-      ignore_errors: yes  # Ignores errors if the secret.yaml file is already decrypted
-
-    - name: Send message to Telegram
+    - name: Envia mensagem para o Telegram
       telegram:
-        api_method: sendMessage
-        api_args:
-          text: Image submitted successfully
-          chat_id: 6632854362
-          token: "{{ decrypted_secret.stdout_lines[0] }}"
-      when: decrypted_secret is succeeded  # Executes the task only if decryption was successful
+        msg: "Imagem submetida com sucesso"
+        token: 7162252872:AAFfQ2zyjHBf7a3j9Bmy-FgPltGYVDO5i6c
+        chat_id: 6632854362
 
 
 
