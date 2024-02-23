@@ -20,7 +20,7 @@
       shell: docker stack deploy -c docker-compose.yml node_js
 
     - name: Verifica o resultado do deploy no Swarm
-      shell: docker service ps --format '{{.Name}}' node_js | grep -v 'COMPLETE' | grep -v 'Shutdown' | grep -v 'Rejected'
+      shell: docker service ps node_js | grep -v 'COMPLETE' | grep -v 'Shutdown' | grep -v 'Rejected'
       register: deploy_result
       ignore_errors: true
 
@@ -33,7 +33,7 @@
           chat_id: 6632854362
           text: "Erro ao submeter a imagem. Verifique os logs para mais detalhes."
         status_code: 200
-      when: deploy_result.rc != 0
+      when: deploy_result|failed
 
     - name: Envia mensagem para o Telegram em caso de sucesso
       uri:
@@ -44,7 +44,8 @@
           chat_id: 6632854362
           text: "Imagem submetida com sucesso"
         status_code: 200
-      when: deploy_result.rc == 0
+      when: not deploy_result|failed
+
 
 
 
