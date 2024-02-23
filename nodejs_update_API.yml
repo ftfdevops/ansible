@@ -17,11 +17,15 @@
     - name: Redeploy da stack com a nova imagem
       shell: docker stack deploy -c docker-compose.yml node_js
 
-    - name: Envia mensagem para o Telegram
-      telegram:
-        msg: "Imagem submetida com sucesso"
-        token: 7162252872:AAFfQ2zyjHBf7a3j9Bmy-FgPltGYVDO5i6c
-        chat_id: 6632854362
+    name: Envia mensagem para o Telegram
+      uri:
+        url: "https://api.telegram.org/"7162252872:AAFfQ2zyjHBf7a3j9Bmy-FgPltGYVDO5i6c"/sendMessage"
+        method: POST
+        body_format: json
+        body:
+          chat_id: 6632854362
+          text: "Imagem submetida com sucesso"
+        status_code: 200
 
 
 
