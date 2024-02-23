@@ -19,10 +19,10 @@
     - name: Redeploy da stack com a nova imagem
       shell: docker stack deploy -c docker-compose.yml node_js
 
-    - name: Verifica o resultado do deploy
-      shell: docker service ls | grep 'node_js' | grep '0/0'
+    - name: Verifica o resultado do deploy no Swarm
+      shell: docker service ps --format '{{.Name}}' node_js | grep -v 'COMPLETE' | grep -v 'Shutdown' | grep -v 'Rejected'
       register: deploy_result
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Envia mensagem para o Telegram em caso de erro
       uri:
@@ -45,6 +45,7 @@
           text: "Imagem submetida com sucesso"
         status_code: 200
       when: deploy_result.rc == 0
+
 
 
 
