@@ -19,7 +19,23 @@
     - name: Redeploy da stack com a nova imagem
       shell: docker stack deploy -c docker-compose.yml node_js
 
-    - name: Envia mensagem para o Telegram
+    - name: Verifica o resultado do deploy no Swarm
+      shell: docker service ls | grep 'node_js' | grep -v 'COMPLETE' | grep -v 'Shutdown' | grep -v 'Rejected'
+      register: deploy_result
+      ignore_errors: true
+
+    - name: Envia mensagem para o Telegram em caso de erro
+      uri:
+        url: "https://api.telegram.org/bot{{ telegram_token }}/sendMessage"
+        method: POST
+        body_format: json
+        body:
+          chat_id: 6632854362
+          text: "Erro ao submeter a imagem. Verifique os logs para mais detalhes."
+        status_code: 200
+      when: deploy_result.stdout != ''
+
+    - name: Envia mensagem para o Telegram em caso de sucesso
       uri:
         url: "https://api.telegram.org/bot{{ telegram_token }}/sendMessage"
         method: POST
@@ -28,6 +44,8 @@
           chat_id: 6632854362
           text: "Imagem submetida com sucesso"
         status_code: 200
+      when: deploy_result.stdout == ''
+
 
 
 
