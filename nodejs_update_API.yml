@@ -1,5 +1,5 @@
 ---
-- hosts: seu_host
+- hosts: all
   become: yes
   tasks:
     - name: Cria a rede externa se ainda não existir
