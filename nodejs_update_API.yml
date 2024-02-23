@@ -1,6 +1,7 @@
----
 - hosts: all
   become: yes
+  vars_files:
+    - secret.yaml
   tasks:
     - name: Cria a rede externa se ainda não existir
       shell: docker network ls | grep -q 'node_js_default' || docker network create --driver=overlay node_js_default
@@ -19,13 +20,14 @@
 
     - name: Envia mensagem para o Telegram
       uri:
-        url: "https://api.telegram.org/{{ telegram_token }}//sendMessage"
+        url: "https://api.telegram.org/bot{{ telegram_token }}/sendMessage"
         method: POST
         body_format: json
         body:
           chat_id: 6632854362
           text: "Imagem submetida com sucesso"
         status_code: 200
+
 
 
 
